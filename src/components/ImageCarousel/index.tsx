@@ -1,10 +1,10 @@
 import clsx from "clsx";
 
-type CarouselProps = {
+type ImageCarouselProps = {
   className?: string;
 };
 
-export function Carousel(props: CarouselProps) {
+export function ImageCarousel(props: ImageCarouselProps) {
   const { className } = props;
 
   return <h1 className={clsx(className)}>Carousel</h1>;
