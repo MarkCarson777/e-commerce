@@ -47,6 +47,7 @@ export function ImageCarousel(props: ImageCarouselProps) {
               style={{
                 objectFit: "cover",
               }}
+              priority
             />
           </div>
         ))}

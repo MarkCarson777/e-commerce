@@ -2,6 +2,7 @@ import { firebaseAuth } from "./config";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut as _signOut,
 } from "firebase/auth";
 
 export const signUp = async (email: string, password: string) => {
@@ -32,4 +33,12 @@ export const signIn = async (email: string, password: string) => {
   }
 
   return { result, error };
+};
+
+export const signOut = async () => {
+  try {
+    await _signOut(firebaseAuth);
+  } catch (err) {
+    console.error("Error signing out", err);
+  }
 };

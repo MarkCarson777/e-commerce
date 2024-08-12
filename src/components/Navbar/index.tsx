@@ -2,12 +2,17 @@
 
 import clsx from "clsx";
 
+import { useRouter } from "next/navigation";
+
+import { signOut } from "@/firebase/auth";
+
 type NavbarProps = {
   className?: string;
 };
 
 export function Navbar(props: NavbarProps) {
   const { className } = props;
+  const router = useRouter();
 
   return (
     <nav className={clsx("bg-gray-800 p-4 w-full h-[56px]", className)}>
@@ -48,6 +53,14 @@ export function Navbar(props: NavbarProps) {
               CART
             </a>
           </li>
+          <button
+            onClick={() => {
+              signOut();
+              router.push("/signin");
+            }}
+          >
+            Sign out
+          </button>
         </ul>
       </div>
     </nav>
