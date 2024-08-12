@@ -21,7 +21,7 @@ export const signUp = async (email: string, password: string) => {
   return { result, error };
 };
 
-export const signInUser = async (email: string, password: string) => {
+export const signIn = async (email: string, password: string) => {
   let result = null;
   let error = null;
 
