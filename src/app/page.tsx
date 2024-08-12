@@ -20,6 +20,7 @@ export default function Home() {
     <main className="flex flex-col min-h-screen items-center">
       <Navbar />
       <ImageCarousel images={carouselImages} />
+      <h1>New Arrivals</h1>
     </main>
   );
 }
