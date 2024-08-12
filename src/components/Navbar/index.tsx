@@ -1,6 +1,14 @@
-export function Navbar() {
+import clsx from "clsx";
+
+type NavbarProps = {
+  className?: string;
+};
+
+export function Navbar(props: NavbarProps) {
+  const { className } = props;
+
   return (
-    <nav className="bg-gray-800 p-4 w-full">
+    <nav className={clsx("bg-gray-800 p-4 w-full", className)}>
       <div className="relative flex justify-between items-center">
         <ul className="flex space-x-4">
           <li>
