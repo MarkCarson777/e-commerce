@@ -53,8 +53,13 @@ export function Navbar(props: NavbarProps) {
             </Link>
           </li>
           <li>
-            <Link href="/dashboard" className="text-gray-300 hover:text-white">
+            <Link href="#" className="text-gray-300 hover:text-white">
               CART
+            </Link>
+          </li>
+          <li>
+            <Link href="/dashboard" className="text-gray-300 hover:text-white">
+              DASHBOARD
             </Link>
           </li>
           {currentUser !== null && (
