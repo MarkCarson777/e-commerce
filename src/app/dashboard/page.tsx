@@ -1,6 +1,6 @@
 "use client";
 
-import { AuthRoute } from "../../containers/AuthRoute";
+import { AuthRoute } from "@/containers/AuthRoute";
 
 import { useProductContext } from "@/context/ProductContext";
 

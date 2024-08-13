@@ -3,7 +3,7 @@
 import clsx from "clsx";
 
 import { useRouter } from "next/navigation";
-import { useAuthContext } from "../../context/AuthContext";
+import { useAuthContext } from "@/context/AuthContext";
 
 import Link from "next/link";
 

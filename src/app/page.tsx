@@ -1,5 +1,5 @@
-import { ImageCarousel } from "../components/ImageCarousel";
-import { Navbar } from "../components/Navbar";
+import { ImageCarousel } from "@/components/ImageCarousel";
+import { Navbar } from "@/components/Navbar";
 
 import carouselOne from "/public/images/carouselOne.jpg";
 import carouselTwo from "/public/images/carouselTwo.jpg";
