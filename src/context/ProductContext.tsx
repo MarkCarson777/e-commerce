@@ -7,6 +7,7 @@ type ProductContextProviderProps = {
 };
 
 type ProductContextType = {
+  products: Product[];
   createProduct: (product: Product) => void;
 };
 
@@ -15,6 +16,7 @@ type Product = {
 };
 
 export const ProductContext = createContext<ProductContextType>({
+  products: [],
   createProduct: () => {},
 });
 
