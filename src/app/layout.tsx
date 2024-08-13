@@ -1,7 +1,8 @@
 "use client";
 
 import "./globals.css";
-import { AuthContextProvider } from "../context/AuthContext";
+import { AuthContextProvider } from "@/context/AuthContext";
+import { ProductContextProvider } from "@/context/ProductContext";
 
 export default function RootLayout({
   children,
@@ -11,7 +12,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <AuthContextProvider>
-        <body>{children}</body>
+        <ProductContextProvider>
+          <body>{children}</body>
+        </ProductContextProvider>
       </AuthContextProvider>
     </html>
   );

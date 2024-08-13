@@ -7,7 +7,11 @@ type ProductContextProviderProps = {
 };
 
 type ProductContextType = {
-  createProduct: (product) => void;
+  createProduct: (product: Product) => void;
+};
+
+type Product = {
+  name: string;
 };
 
 export const ProductContext = createContext<ProductContextType>({
@@ -19,8 +23,9 @@ export const useProductContext = () => useContext(ProductContext);
 export const ProductContextProvider = ({
   children,
 }: ProductContextProviderProps) => {
-  const createProduct = (product) => {
+  const createProduct = (product: Product) => {
     const ref = collection(firestore, "products");
+
     try {
       addDoc(ref, product);
     } catch (err) {
