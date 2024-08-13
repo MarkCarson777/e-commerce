@@ -5,7 +5,9 @@ import { AuthRoute } from "@/containers/AuthRoute";
 import { useProductContext } from "@/context/ProductContext";
 
 function Page() {
-  const { createProduct } = useProductContext();
+  const { createProduct, products } = useProductContext();
+
+  console.log(products);
 
   return (
     <>
