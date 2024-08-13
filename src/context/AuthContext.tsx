@@ -7,24 +7,24 @@ type AuthContextProviderProps = {
 };
 
 type AuthContextType = {
-  user: User | null;
+  currentUser: User | null;
 };
 
 export const AuthContext = createContext<AuthContextType>({
-  user: {} as User | null,
+  currentUser: {} as User | null,
 });
 
 export const useAuthContext = () => useContext(AuthContext);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(firebaseAuth, (user) => {
       if (user) {
-        setUser(user);
+        setCurrentUser(user);
       } else {
-        setUser(null);
+        setCurrentUser(null);
       }
     });
 
@@ -32,6 +32,8 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ currentUser }}>
+      {children}
+    </AuthContext.Provider>
   );
 };

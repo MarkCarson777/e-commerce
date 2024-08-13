@@ -3,6 +3,9 @@
 import clsx from "clsx";
 
 import { useRouter } from "next/navigation";
+import { useAuthContext } from "../../context/AuthContext";
+
+import Link from "next/link";
 
 import { signOut } from "@/firebase/auth";
 
@@ -12,6 +15,7 @@ type NavbarProps = {
 
 export function Navbar(props: NavbarProps) {
   const { className } = props;
+  const { currentUser } = useAuthContext();
   const router = useRouter();
 
   return (
@@ -19,19 +23,19 @@ export function Navbar(props: NavbarProps) {
       <div className="relative flex justify-between items-center">
         <ul className="flex space-x-4">
           <li>
-            <a href="#" className="text-gray-300 hover:text-white">
+            <Link href="#" className="text-gray-300 hover:text-white">
               SHOP
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#" className="text-gray-300 hover:text-white">
+            <Link href="#" className="text-gray-300 hover:text-white">
               SIZING AND FIT
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#" className="text-gray-300 hover:text-white">
+            <Link href="#" className="text-gray-300 hover:text-white">
               CUSTOMER CARE
-            </a>
+            </Link>
           </li>
         </ul>
         <h1 className="absolute left-1/2 transform -translate-x-1/2 text-white text-xl font-bold">
@@ -39,28 +43,30 @@ export function Navbar(props: NavbarProps) {
         </h1>
         <ul className="flex space-x-4">
           <li>
-            <a href="#" className="text-gray-300 hover:text-white">
+            <Link href="#" className="text-gray-300 hover:text-white">
               SEARCH
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#" className="text-gray-300 hover:text-white">
+            <Link href="/signin" className="text-gray-300 hover:text-white">
               USER
-            </a>
+            </Link>
           </li>
           <li>
-            <a href="#" className="text-gray-300 hover:text-white">
+            <Link href="/dashboard" className="text-gray-300 hover:text-white">
               CART
-            </a>
+            </Link>
           </li>
-          <button
-            onClick={() => {
-              signOut();
-              router.push("/signin");
-            }}
-          >
-            Sign out
-          </button>
+          {currentUser !== null && (
+            <button
+              onClick={() => {
+                signOut();
+                router.push("/");
+              }}
+            >
+              Signout
+            </button>
+          )}
         </ul>
       </div>
     </nav>
