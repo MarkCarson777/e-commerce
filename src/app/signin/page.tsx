@@ -5,6 +5,7 @@ import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { signIn } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 const SignInSchema = z.object({
   email: z.string().email(),
@@ -31,23 +32,31 @@ export default function Page() {
         }}
       >
         {() => (
-          <Form className="flex flex-col">
-            <Field
-              name="email"
-              type="email"
-              placeholder="Email..."
-              autoComplete="email"
-            />
-            <ErrorMessage name="email" />
-            <Field
-              name="password"
-              type="password"
-              placeholder="Password..."
-              autoComplete="current-password"
-            />
-            <ErrorMessage name="password" />
-            <button type="submit">Sign in</button>
-          </Form>
+          <>
+            <Form className="flex flex-col">
+              <Field
+                name="email"
+                type="email"
+                placeholder="Email..."
+                autoComplete="email"
+              />
+              <ErrorMessage name="email" />
+              <Field
+                name="password"
+                type="password"
+                placeholder="Password..."
+                autoComplete="current-password"
+              />
+              <ErrorMessage name="password" />
+              <button type="submit">Sign in</button>
+            </Form>
+            <div className="flex gap-1 text-xs">
+              <span>Don't have an account?</span>
+              <Link className="underline hover:no-underline" href="/signup">
+                Sign Up
+              </Link>
+            </div>
+          </>
         )}
       </Formik>
     </div>
