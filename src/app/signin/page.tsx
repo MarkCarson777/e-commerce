@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Formik, Form, ErrorMessage, FormikHelpers } from "formik";
+import { Field, Formik, Form, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { signIn } from "@/firebase/auth";
