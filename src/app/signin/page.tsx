@@ -1,11 +1,16 @@
 "use client";
 
-import { Field, Formik, Form, ErrorMessage } from "formik";
+import { Field, Formik, Form, ErrorMessage, FormikHelpers } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 import { signIn } from "@/firebase/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
+type SignInValues = {
+  email: string;
+  password: string;
+};
 
 const SignInSchema = z.object({
   email: z.string().email(),
@@ -17,10 +22,10 @@ export default function Page() {
 
   return (
     <div className="flex flex-col h-screen w-full justify-center items-center">
-      <Formik
+      <Formik<SignInValues>
         initialValues={{ email: "", password: "" }}
         validationSchema={toFormikValidationSchema(SignInSchema)}
-        onSubmit={async (values) => {
+        onSubmit={async (values: SignInValues) => {
           const { result, error } = await signIn(values.email, values.password);
 
           if (error) {
@@ -31,7 +36,7 @@ export default function Page() {
           return router.push("/");
         }}
       >
-        {() => (
+        {({ isSubmitting }) => (
           <>
             <Form className="flex flex-col">
               <Field
@@ -48,7 +53,9 @@ export default function Page() {
                 autoComplete="current-password"
               />
               <ErrorMessage name="password" />
-              <button type="submit">Sign in</button>
+              <button type="submit" disabled={isSubmitting}>
+                Sign in
+              </button>
             </Form>
             <div className="flex gap-1 text-xs">
               <span>Don't have an account?</span>
