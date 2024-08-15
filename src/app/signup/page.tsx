@@ -44,7 +44,7 @@ export default function Page() {
             return console.log("Error signing up user", error);
           }
 
-          console.log("Successfully signed up use", result);
+          console.log("Successfully signed up user", result);
           return router.push("/");
         }}
       >

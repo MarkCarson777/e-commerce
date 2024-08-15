@@ -29,6 +29,9 @@ function Page() {
           Create
         </button>
       </form>
+      {products.map((product, index) => (
+        <div key={index}>{JSON.stringify(product)}</div>
+      ))}
     </>
   );
 }
