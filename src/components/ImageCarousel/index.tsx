@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { useAuthContext } from "@/context/AuthContext";
+
 import clsx from "clsx";
 
 import Image, { StaticImageData } from "next/image";

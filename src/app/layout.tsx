@@ -11,11 +11,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <AuthContextProvider>
-        <ProductContextProvider>
-          <body>{children}</body>
-        </ProductContextProvider>
-      </AuthContextProvider>
+      <body>
+        <AuthContextProvider>
+          <ProductContextProvider>{children}</ProductContextProvider>
+        </AuthContextProvider>
+      </body>
     </html>
   );
 }

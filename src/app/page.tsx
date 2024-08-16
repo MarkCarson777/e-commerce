@@ -1,3 +1,5 @@
+"use client";
+
 import { ImageCarousel } from "@/components/ImageCarousel";
 import { Navbar } from "@/components/Navbar";
 
