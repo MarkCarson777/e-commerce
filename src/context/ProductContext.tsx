@@ -1,6 +1,15 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { firestore } from "@/firebase/config";
-import { collection, addDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  CollectionReference,
+  DocumentReference,
+  QueryDocumentSnapshot,
+  WithFieldValue,
+} from "firebase/firestore";
+import { Product } from "@/types";
 
 type ProductContextProviderProps = {
   children: React.ReactNode;
@@ -8,19 +17,26 @@ type ProductContextProviderProps = {
 
 type ProductContextType = {
   products: Product[];
-  createProduct: (product: Product) => void;
-};
-
-type Product = {
-  name: string;
+  createProduct: (
+    product: Product
+  ) => Promise<{ result: Product | null; error: string | null }>;
 };
 
 export const ProductContext = createContext<ProductContextType>({
   products: [],
-  createProduct: () => {},
+  createProduct: async () => ({ result: null, error: null }),
 });
 
 export const useProductContext = () => useContext(ProductContext);
+
+const dataConverter = {
+  toFirestore(value: WithFieldValue<Product>) {
+    return value;
+  },
+  fromFirestore(snapshot: QueryDocumentSnapshot) {
+    return snapshot.data() as Product;
+  },
+};
 
 export const ProductContextProvider = ({
   children,
@@ -32,7 +48,8 @@ export const ProductContextProvider = ({
       const querySnapshot = await getDocs(collection(firestore, "products"));
       const fetchedProducts: Product[] = [];
       querySnapshot.forEach((doc) => {
-        fetchedProducts.push(doc.data() as Product);
+        const id = doc.id;
+        fetchedProducts.push({ ...doc.data(), id } as Product);
       });
       setProducts(fetchedProducts);
     };
@@ -40,14 +57,22 @@ export const ProductContextProvider = ({
     getProducts();
   }, []);
 
-  const createProduct = (product: Product) => {
-    const ref = collection(firestore, "products");
+  const createProduct = async (product: Product) => {
+    const ref: CollectionReference<Product> = collection(
+      firestore,
+      "products"
+    ).withConverter(dataConverter);
+    let result: Product | null = null;
+    let error: string | null = null;
 
     try {
-      addDoc(ref, product);
+      const docRef: DocumentReference = await addDoc(ref, product);
+      result = { ...product, id: docRef.id };
     } catch (err) {
-      console.log(err);
+      error = (err as Error).message;
     }
+
+    return { result, error };
   };
 
   return (

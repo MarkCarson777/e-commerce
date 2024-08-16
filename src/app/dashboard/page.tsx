@@ -1,34 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { AuthRoute } from "@/containers/AuthRoute";
 
 import { useProductContext } from "@/context/ProductContext";
 
 function Page() {
-  const { createProduct, products } = useProductContext();
-
-  console.log(products);
+  const { products } = useProductContext();
 
   return (
     <>
-      <h1>Create product</h1>
-      <form>
-        <label htmlFor="name" />
-        <input type="text" name="name" id="name" placeholder="Name..." />
-        <button
-          onClick={async (e) => {
-            e.preventDefault();
-            try {
-              await createProduct({ name: "test" });
-              console.log("Product created successfully");
-            } catch (error) {
-              console.error("Error creating product", error);
-            }
-          }}
-        >
-          Create
-        </button>
-      </form>
+      <Link href="/dashboard/create">Add product</Link>
+      <h1>All products</h1>
       {products.map((product, index) => (
         <div key={index}>{JSON.stringify(product)}</div>
       ))}
