@@ -17,6 +17,7 @@ type ProductContextProviderProps = {
 
 type ProductContextType = {
   products: Product[];
+  getProducts: () => Promise<void>;
   createProduct: (
     product: Product
   ) => Promise<{ result: Product | null; error: string | null }>;
@@ -24,6 +25,7 @@ type ProductContextType = {
 
 export const ProductContext = createContext<ProductContextType>({
   products: [],
+  getProducts: async () => {},
   createProduct: async () => ({ result: null, error: null }),
 });
 
@@ -43,27 +45,27 @@ export const ProductContextProvider = ({
 }: ProductContextProviderProps) => {
   const [products, setProducts] = useState<Product[]>([]);
 
-  useEffect(() => {
-    const getProducts = async () => {
-      const querySnapshot = await getDocs(collection(firestore, "products"));
-      const fetchedProducts: Product[] = [];
-      querySnapshot.forEach((doc) => {
-        const id = doc.id;
-        fetchedProducts.push({ ...doc.data(), id } as Product);
-      });
-      setProducts(fetchedProducts);
-    };
+  const getProducts = async () => {
+    const querySnapshot = await getDocs(collection(firestore, "products"));
+    const fetchedProducts: Product[] = [];
+    querySnapshot.forEach((doc) => {
+      const id = doc.id;
+      fetchedProducts.push({ ...doc.data(), id } as Product);
+    });
+    setProducts(fetchedProducts);
+  };
 
+  useEffect(() => {
     getProducts();
   }, []);
 
   const createProduct = async (product: Product) => {
+    let result: Product | null = null;
+    let error: string | null = null;
     const ref: CollectionReference<Product> = collection(
       firestore,
       "products"
     ).withConverter(dataConverter);
-    let result: Product | null = null;
-    let error: string | null = null;
 
     try {
       const docRef: DocumentReference = await addDoc(ref, product);
@@ -76,7 +78,7 @@ export const ProductContextProvider = ({
   };
 
   return (
-    <ProductContext.Provider value={{ createProduct, products }}>
+    <ProductContext.Provider value={{ createProduct, getProducts, products }}>
       {children}
     </ProductContext.Provider>
   );

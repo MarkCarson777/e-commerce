@@ -22,7 +22,7 @@ const CreateProductSchema = z.object({
 });
 
 function Page() {
-  const { createProduct } = useProductContext();
+  const { createProduct, getProducts } = useProductContext();
   const router = useRouter();
 
   return (
@@ -42,12 +42,14 @@ function Page() {
         validationSchema={toFormikValidationSchema(CreateProductSchema)}
         onSubmit={async (values: Product) => {
           const { result, error } = await createProduct(values);
+
           if (error) {
             return console.log("Error creating product", error);
           }
 
           if (result) {
             console.log("Product created with ID:", result.id);
+            await getProducts();
             return router.push("/dashboard");
           }
         }}
