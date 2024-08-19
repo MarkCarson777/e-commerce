@@ -53,6 +53,11 @@ export const ProductContextProvider = ({
     const products = querySnapshot.docs.map(async (doc) => {
       const id = doc.id;
       const data = doc.data() as Product;
+
+      if (typeof data.image !== "string") {
+        throw new Error("image path is not a string");
+      }
+
       const imageUrl = await getDownloadURL(ref(firebaseStorage, data.image));
 
       return { ...data, id, imageUrl };

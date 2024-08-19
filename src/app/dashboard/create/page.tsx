@@ -42,11 +42,14 @@ function Page() {
           description: "",
           sizes: [],
           currency: "",
-          image: "",
+          image: null,
         }}
         validationSchema={toFormikValidationSchema(CreateProductSchema)}
         onSubmit={async (values: Product) => {
-          console.log("values", values);
+          if (!values.image) {
+            return;
+          }
+
           const storageRef = ref(
             firebaseStorage,
             `images/${values.image.name}`
@@ -55,7 +58,7 @@ function Page() {
           try {
             await uploadBytes(storageRef, values.image);
             const url = await getDownloadURL(storageRef);
-            values.image = url;
+            values.imageUrl = url;
 
             const { result } = await createProduct(values);
 
