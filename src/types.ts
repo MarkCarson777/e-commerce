@@ -6,6 +6,6 @@ export type Product = {
   description: string;
   sizes: string[];
   currency: string;
-  image: File | null;
+  image: any;
   imageUrl?: string;
 };

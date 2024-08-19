@@ -5,6 +5,8 @@ import Link from "next/link";
 import { AuthRoute } from "@/containers/AuthRoute";
 import { useProductContext } from "@/context/ProductContext";
 
+import placeholder from "/public/images/carouselOne.jpg";
+
 function Page() {
   const { products } = useProductContext();
 
@@ -16,7 +18,7 @@ function Page() {
         <div key={index}>
           <span>{product.name}</span>
           <Image
-            src={product.image}
+            src={product.image || placeholder}
             alt={product.name}
             height={200}
             width={200}
