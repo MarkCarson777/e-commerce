@@ -1,20 +1,23 @@
 "use client";
 
+// Forms and validation
 import { Form, Formik, Field, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
+// Firebase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseStorage } from "@/firebase/config";
-
+// Routing
 import { AuthRoute } from "@/containers/AuthRoute";
 import { useRouter } from "next/navigation";
-
+// Components
 import { Button } from "@/components/Button";
+import { FormInput } from "@/components/FormInput";
 import { Navbar } from "@/components/Navbar";
-
+// Context
 import { useProductContext } from "@/context/ProductContext";
-
+// Types
 import { Product } from "@/types";
 
 const CreateProductSchema = z.object({
@@ -77,8 +80,7 @@ function Page() {
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form className="flex flex-col">
-              <Field name="name" placeholder="Name" />
-              <ErrorMessage name="name" />
+              <FormInput name="name" placeholder="Product name..." />
               <Field name="price" type="number" placeholder="Price" />
               <ErrorMessage name="price" />
               <Field name="quantity" type="number" placeholder="Quantity" />
