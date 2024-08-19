@@ -4,13 +4,14 @@ import { Form, Formik, Field, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { firebaseStorage } from "@/firebase/config";
+
 import Link from "next/link";
 import { AuthRoute } from "@/containers/AuthRoute";
 import { useRouter } from "next/navigation";
 
 import { useProductContext } from "@/context/ProductContext";
-
-import { UploadFile } from "@/utilities/UploadFile";
 
 import { Product } from "@/types";
 
@@ -21,7 +22,7 @@ const CreateProductSchema = z.object({
   description: z.string(),
   sizes: z.array(z.string()).optional(),
   currency: z.string().optional(),
-  image: z.any().optional(),
+  image: z.any(),
 });
 
 function Page() {
@@ -41,20 +42,30 @@ function Page() {
           description: "",
           sizes: [],
           currency: "",
-          image: null,
+          image: "",
         }}
         validationSchema={toFormikValidationSchema(CreateProductSchema)}
         onSubmit={async (values: Product) => {
-          const { result, error } = await createProduct(values);
+          console.log("values", values);
+          const storageRef = ref(
+            firebaseStorage,
+            `images/${values.image.name}`
+          );
 
-          if (error) {
-            return console.log("Error creating product", error);
-          }
+          try {
+            await uploadBytes(storageRef, values.image);
+            const url = await getDownloadURL(storageRef);
+            values.image = url;
 
-          if (result) {
-            console.log("Product created with ID:", result.id);
-            await getProducts();
-            return router.push("/dashboard");
+            const { result } = await createProduct(values);
+
+            if (result) {
+              console.log("Product created with ID:", result.id);
+              await getProducts();
+              return router.push("/dashboard");
+            }
+          } catch (error) {
+            console.error("Error creating product", error);
           }
         }}
       >
@@ -72,7 +83,16 @@ function Page() {
             <ErrorMessage name="sizes" />
             <Field name="currency" placeholder="Currency" />
             <ErrorMessage name="currency" />
-            <UploadFile setFieldValue={setFieldValue} />
+            <input
+              type="file"
+              onChange={(event) => {
+                const file = event.target.files?.[0];
+
+                if (file) {
+                  setFieldValue("image", file, false);
+                }
+              }}
+            />
             <button type="submit" disabled={isSubmitting}>
               Add product
             </button>

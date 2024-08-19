@@ -9,6 +9,8 @@ import {
   QueryDocumentSnapshot,
   WithFieldValue,
 } from "firebase/firestore";
+import { firebaseStorage } from "@/firebase/config";
+import { ref, getDownloadURL } from "firebase/storage";
 import { Product } from "@/types";
 
 type ProductContextProviderProps = {
@@ -47,12 +49,18 @@ export const ProductContextProvider = ({
 
   const getProducts = async () => {
     const querySnapshot = await getDocs(collection(firestore, "products"));
-    const fetchedProducts: Product[] = [];
-    querySnapshot.forEach((doc) => {
+
+    const products = querySnapshot.docs.map(async (doc) => {
       const id = doc.id;
-      fetchedProducts.push({ ...doc.data(), id } as Product);
+      const data = doc.data() as Product;
+      const imageUrl = await getDownloadURL(ref(firebaseStorage, data.image));
+
+      return { ...data, id, imageUrl };
     });
-    setProducts(fetchedProducts);
+
+    const productsWithImages = await Promise.all(products);
+
+    setProducts(productsWithImages);
   };
 
   useEffect(() => {
