@@ -1,7 +1,7 @@
 "use client";
 
 // Forms and validation
-import { Form, Formik, Field, ErrorMessage } from "formik";
+import { Form, Formik } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
 
@@ -79,28 +79,45 @@ function Page() {
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
-            <Form className="flex flex-col">
-              <FormInput name="name" placeholder="Product name..." />
-              <Field name="price" type="number" placeholder="Price" />
-              <ErrorMessage name="price" />
-              <Field name="quantity" type="number" placeholder="Quantity" />
-              <ErrorMessage name="quantity" />
-              <Field name="description" placeholder="Description" />
-              <ErrorMessage name="description" />
-              <Field name="sizes" placeholder="Sizes" />
-              <ErrorMessage name="sizes" />
-              <Field name="currency" placeholder="Currency" />
-              <ErrorMessage name="currency" />
-              <input
-                type="file"
-                onChange={(event) => {
-                  const file = event.target.files?.[0];
-
-                  if (file) {
-                    setFieldValue("image", file, false);
-                  }
-                }}
+            <Form className="flex flex-col gap-2">
+              <FormInput
+                name="name"
+                label="Name*"
+                type="text"
+                placeholder="Enter a product name"
+                autoComplete="off"
               />
+              <FormInput name="price" label="Selling price(£)*" type="number" />
+              <FormInput
+                name="quantity"
+                label="Stock quantity*"
+                type="number"
+              />
+              <FormInput
+                name="description"
+                label="Description*"
+                placeholder="Describe the product"
+                type="textarea"
+                autoComplete="off"
+              />
+              {/* Add sizes and currency fields */}
+              <div className="flex flex-col">
+                <label className="text-sm" htmlFor="photo">
+                  Product image*
+                </label>
+                <input
+                  id="photo"
+                  className="pt-1 pb-2"
+                  type="file"
+                  onChange={(event) => {
+                    const file = event.target.files?.[0];
+
+                    if (file) {
+                      setFieldValue("image", file, false);
+                    }
+                  }}
+                />
+              </div>
               <Button
                 type="submit"
                 color="primary"
