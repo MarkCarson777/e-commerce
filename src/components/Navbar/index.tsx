@@ -7,9 +7,9 @@ import { useAuthContext } from "@/context/AuthContext";
 
 import Link from "next/link";
 
-import { signOut } from "@/firebase/auth";
+// import { signOut } from "@/firebase/auth";
 
-import { Button } from "@/components/Button";
+// import { Button } from "@/components/Button";
 
 type NavbarProps = {
   className?: string;
@@ -17,8 +17,8 @@ type NavbarProps = {
 
 export function Navbar(props: NavbarProps) {
   const { className } = props;
-  const { currentUser } = useAuthContext();
-  const router = useRouter();
+  // const { currentUser } = useAuthContext();
+  // const router = useRouter();
 
   return (
     <nav className={clsx("bg-gray-800 p-4 w-full h-[56px]", className)}>
@@ -64,7 +64,7 @@ export function Navbar(props: NavbarProps) {
               DASHBOARD
             </Link>
           </li>
-          {currentUser !== null && (
+          {/* {currentUser !== null && (
             <Button
               type="button"
               color="danger"
@@ -75,7 +75,7 @@ export function Navbar(props: NavbarProps) {
             >
               <span>Sign out</span>
             </Button>
-          )}
+          )} */}
         </ul>
       </div>
     </nav>
