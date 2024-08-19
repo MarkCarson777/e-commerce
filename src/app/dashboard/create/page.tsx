@@ -22,8 +22,8 @@ import { Product } from "@/types";
 
 const CreateProductSchema = z.object({
   name: z.string(),
-  price: z.number(),
-  quantity: z.number(),
+  price: z.number().min(1, "Price must be greater than 0"),
+  quantity: z.number().min(1, "Quantity must be greater than 0"),
   description: z.string(),
   sizes: z.array(z.string()).optional(),
   currency: z.string().optional(),
