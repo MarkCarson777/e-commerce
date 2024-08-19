@@ -40,9 +40,12 @@ export function Navbar(props: NavbarProps) {
             </Link>
           </li>
         </ul>
-        <h1 className="absolute left-1/2 transform -translate-x-1/2 text-white text-xl font-bold">
-          E-Commerce
-        </h1>
+        <Link
+          href="/"
+          className="absolute left-1/2 transform -translate-x-1/2 text-white text-xl font-bold"
+        >
+          E-COMMERCE
+        </Link>
         <ul className="flex space-x-4">
           <li>
             <Link href="#" className="text-gray-300 hover:text-white">
