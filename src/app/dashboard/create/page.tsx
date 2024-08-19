@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 
 import { useProductContext } from "@/context/ProductContext";
 
+import { UploadFile } from "@/utilities/UploadFile";
+
 import { Product } from "@/types";
 
 const CreateProductSchema = z.object({
@@ -19,6 +21,7 @@ const CreateProductSchema = z.object({
   description: z.string(),
   sizes: z.array(z.string()).optional(),
   currency: z.string().optional(),
+  image: z.any().optional(),
 });
 
 function Page() {
@@ -38,6 +41,7 @@ function Page() {
           description: "",
           sizes: [],
           currency: "",
+          image: null,
         }}
         validationSchema={toFormikValidationSchema(CreateProductSchema)}
         onSubmit={async (values: Product) => {
@@ -54,7 +58,7 @@ function Page() {
           }
         }}
       >
-        {({ isSubmitting }) => (
+        {({ isSubmitting, setFieldValue }) => (
           <Form className="flex flex-col">
             <Field name="name" placeholder="Name" />
             <ErrorMessage name="name" />
@@ -68,6 +72,7 @@ function Page() {
             <ErrorMessage name="sizes" />
             <Field name="currency" placeholder="Currency" />
             <ErrorMessage name="currency" />
+            <UploadFile setFieldValue={setFieldValue} />
             <button type="submit" disabled={isSubmitting}>
               Add product
             </button>
