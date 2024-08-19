@@ -11,6 +11,8 @@ import Link from "next/link";
 import { AuthRoute } from "@/containers/AuthRoute";
 import { useRouter } from "next/navigation";
 
+import { Button } from "@/components/Button";
+
 import { useProductContext } from "@/context/ProductContext";
 
 import { Product } from "@/types";
@@ -96,9 +98,14 @@ function Page() {
                 }
               }}
             />
-            <button type="submit" disabled={isSubmitting}>
-              Add product
-            </button>
+            <Button
+              type="submit"
+              color="primary"
+              disabled={isSubmitting}
+              pending={isSubmitting}
+            >
+              <span>Add product</span>
+            </Button>
           </Form>
         )}
       </Formik>
