@@ -3,9 +3,13 @@
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { signIn } from "@/firebase/auth";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
+import { Button } from "@/components/Button";
 
 type SignInValues = {
   email: string;
@@ -53,9 +57,14 @@ export default function Page() {
                 autoComplete="current-password"
               />
               <ErrorMessage name="password" />
-              <button type="submit" disabled={isSubmitting}>
-                Sign in
-              </button>
+              <Button
+                type="submit"
+                color="primary"
+                disabled={isSubmitting}
+                pending={isSubmitting}
+              >
+                <span>Sign in</span>
+              </Button>
             </Form>
             <div className="flex gap-1 text-xs">
               <span>Don't have an account?</span>

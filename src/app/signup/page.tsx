@@ -3,9 +3,13 @@
 import { Field, Formik, Form, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
+
 import { signUp } from "@/firebase/auth";
+
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+
+import { Button } from "@/components/Button";
 
 type SignUpValues = {
   email: string;
@@ -72,9 +76,14 @@ export default function Page() {
                 autoComplete="confirm-password"
               />
               <ErrorMessage name="confirmPassword" />
-              <button type="submit" disabled={isSubmitting}>
-                Sign up
-              </button>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                color="primary"
+                pending={isSubmitting}
+              >
+                <span>Sign up</span>
+              </Button>
             </Form>
             <div className="flex gap-1 text-xs">
               <span>Already have an account?</span>
