@@ -25,14 +25,14 @@ type ProductContextType = {
   createProduct: (
     product: Product
   ) => Promise<{ result: Product | null; error: string | null }>;
-  deleteProduct: (id: string | null) => Promise<void>;
+  deleteProduct: (id: string | null) => Promise<{ error: string | null }>;
 };
 
 export const ProductContext = createContext<ProductContextType>({
   products: [],
   getProducts: async () => {},
   createProduct: async () => ({ result: null, error: null }),
-  deleteProduct: async () => {},
+  deleteProduct: async () => ({ error: null }),
 });
 
 export const useProductContext = () => useContext(ProductContext);
@@ -94,10 +94,24 @@ export const ProductContextProvider = ({
     return { result, error };
   };
 
-  const deleteProduct = async (id: string) => {
-    const ref = doc(firestore, "products", id); // Get a reference to the specific document
-    await deleteDoc(ref); // Delete the document using deleteDoc
-    await getProducts(); // Refresh the product list
+  const deleteProduct = async (id: string | null) => {
+    let error: string | null = null;
+
+    if (id === null) {
+      error = "Product ID cannot be null";
+      return { error };
+    }
+
+    const ref = doc(firestore, "products", id);
+
+    try {
+      await deleteDoc(ref);
+    } catch (err) {
+      error = (err as Error).message;
+    }
+
+    await getProducts();
+    return { error };
   };
 
   return (

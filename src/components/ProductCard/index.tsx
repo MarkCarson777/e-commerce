@@ -52,11 +52,18 @@ export function ProductCard(props: ProductCardProps) {
           <Button
             type="button"
             color="danger"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
               e.stopPropagation();
-              deleteProduct(product.id);
-              console.log("Product deleted");
+              try {
+                const { error } = await deleteProduct(product.id);
+                if (error) {
+                  console.error(error);
+                }
+              } catch (error) {
+                console.error(error);
+              }
+              console.log("Deleted product", product.id);
             }}
           >
             <span>Remove</span>
