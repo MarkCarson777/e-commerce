@@ -1,10 +1,9 @@
 "use client";
 
 // Forms and validation
-import { Form, Formik } from "formik";
+import { Form, Formik, ErrorMessage } from "formik";
 import { z } from "zod";
 import { toFormikValidationSchema } from "zod-formik-adapter";
-
 // Firebase
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseStorage } from "@/firebase/config";
@@ -50,8 +49,10 @@ function Page() {
             image: null,
           }}
           validationSchema={toFormikValidationSchema(CreateProductSchema)}
-          onSubmit={async (values: Product) => {
+          onSubmit={async (values: Product, { setSubmitting, setErrors }) => {
             if (!values.image) {
+              setErrors({ image: "An image is required" });
+              setSubmitting(false);
               return;
             }
 
@@ -63,9 +64,13 @@ function Page() {
             try {
               await uploadBytes(storageRef, values.image);
               const url = await getDownloadURL(storageRef);
-              values.imageUrl = url;
+              values.image = url;
 
-              const { result } = await createProduct(values);
+              const { result, error } = await createProduct(values);
+
+              if (error) {
+                throw new Error(error);
+              }
 
               if (result) {
                 console.log("Product created with ID:", result.id);
@@ -74,6 +79,8 @@ function Page() {
               }
             } catch (error) {
               console.error("Error creating product", error);
+            } finally {
+              setSubmitting(false);
             }
           }}
         >
@@ -122,7 +129,14 @@ function Page() {
                       if (file) {
                         setFieldValue("image", file, false);
                       }
+
+                      // use github to display image
                     }}
+                  />
+                  <ErrorMessage
+                    name="image"
+                    component="div"
+                    className="text-red-500"
                   />
                 </div>
               </div>
