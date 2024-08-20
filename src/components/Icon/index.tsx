@@ -1,4 +1,8 @@
+"use client";
+
 import { ReactElement } from "react";
+
+import CircleLeft from "./icons/circle-left.svg";
 
 export interface IconProps {
   icon: string;
@@ -11,7 +15,9 @@ interface IconComponents {
   [key: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 }
 
-const icons: IconComponents = {};
+const icons: IconComponents = {
+  CircleLeft,
+};
 
 export const Icon = ({
   icon,

@@ -12,11 +12,13 @@ import { toFormikValidationSchema } from "zod-formik-adapter";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { firebaseStorage } from "@/firebase/config";
 // Routing
+import Link from "next/link";
 import { AuthRoute } from "@/containers/AuthRoute";
 import { useRouter, useParams } from "next/navigation";
 // Components
 import { Button } from "@/components/Button";
 import { FormInput } from "@/components/FormInput";
+import { Icon } from "@/components/Icon";
 // Context
 import { useProductContext } from "@/context/ProductContext";
 // Types
@@ -81,7 +83,10 @@ function Page() {
 
   return (
     <main className="h-screen w-full flex flex-col">
-      <div className="bg-gray-200 w-full flex items-center pl-4 py-2">
+      <div className="bg-gray-200 w-full flex items-center gap-3 pl-3 py-2">
+        <Link href="/dashboard">
+          <Icon icon="CircleLeft" size={24} />
+        </Link>
         <h1 className="text-2xl">Edit product</h1>
       </div>
       <Formik<Product>
