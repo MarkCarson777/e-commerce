@@ -10,7 +10,7 @@ export default function Layout({
   return (
     <div className="flex">
       <Sidebar />
-      <div className="w-full">{children}</div>
+      <main className="w-full">{children}</main>
     </div>
   );
 }

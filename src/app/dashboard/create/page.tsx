@@ -17,7 +17,6 @@ import { useRouter } from "next/navigation";
 // Components
 import { Button } from "@/components/Button";
 import { FormInput } from "@/components/FormInput";
-import { Navbar } from "@/components/Navbar";
 // Context
 import { useProductContext } from "@/context/ProductContext";
 // Types
@@ -79,7 +78,6 @@ function Page() {
 
   return (
     <div className="bg-[#e8e8e9] min-h-screen">
-      <Navbar />
       <main className="h-screen w-full flex flex-col justify-center items-center">
         <Formik<Product>
           initialValues={{
