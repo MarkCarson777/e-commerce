@@ -6,6 +6,8 @@ import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/Button";
 
+import { useProductContext } from "@/context/ProductContext";
+
 import placeholder from "/public/images/carouselOne.jpg";
 
 import { Product } from "@/types";
@@ -17,6 +19,7 @@ type ProductCardProps = {
 
 export function ProductCard(props: ProductCardProps) {
   const { product, className } = props;
+  const { deleteProduct } = useProductContext();
   const router = useRouter();
 
   return (
@@ -52,7 +55,8 @@ export function ProductCard(props: ProductCardProps) {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              console.log("Remove");
+              deleteProduct(product.id);
+              console.log("Product deleted");
             }}
           >
             <span>Remove</span>

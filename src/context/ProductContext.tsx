@@ -1,9 +1,11 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { firestore } from "@/firebase/config";
 import {
+  doc,
   collection,
   addDoc,
   getDocs,
+  deleteDoc,
   CollectionReference,
   DocumentReference,
   QueryDocumentSnapshot,
@@ -23,12 +25,14 @@ type ProductContextType = {
   createProduct: (
     product: Product
   ) => Promise<{ result: Product | null; error: string | null }>;
+  deleteProduct: (id: string | null) => Promise<void>;
 };
 
 export const ProductContext = createContext<ProductContextType>({
   products: [],
   getProducts: async () => {},
   createProduct: async () => ({ result: null, error: null }),
+  deleteProduct: async () => {},
 });
 
 export const useProductContext = () => useContext(ProductContext);
@@ -90,8 +94,16 @@ export const ProductContextProvider = ({
     return { result, error };
   };
 
+  const deleteProduct = async (id: string) => {
+    const ref = doc(firestore, "products", id); // Get a reference to the specific document
+    await deleteDoc(ref); // Delete the document using deleteDoc
+    await getProducts(); // Refresh the product list
+  };
+
   return (
-    <ProductContext.Provider value={{ createProduct, getProducts, products }}>
+    <ProductContext.Provider
+      value={{ createProduct, deleteProduct, getProducts, products }}
+    >
       {children}
     </ProductContext.Provider>
   );
