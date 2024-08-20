@@ -1,5 +1,9 @@
 "use client";
 
+// React
+import { useState } from "react";
+// Next
+import Image from "next/image";
 // Forms and validation
 import { Form, Formik, ErrorMessage } from "formik";
 import { z } from "zod";
@@ -30,6 +34,7 @@ const CreateProductSchema = z.object({
 });
 
 function Page() {
+  const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
   const { createProduct, getProducts } = useProductContext();
   const router = useRouter();
 
@@ -62,7 +67,6 @@ function Page() {
             );
 
             try {
-              await uploadBytes(storageRef, values.image);
               const url = await getDownloadURL(storageRef);
               values.image = url;
 
@@ -123,21 +127,37 @@ function Page() {
                     id="photo"
                     className="pt-1 pb-2"
                     type="file"
-                    onChange={(event) => {
+                    onChange={async (event) => {
                       const file = event.target.files?.[0];
 
                       if (file) {
                         setFieldValue("image", file, false);
+                        const storageRef = ref(
+                          firebaseStorage,
+                          `images/${file.name}`
+                        );
+                        await uploadBytes(storageRef, file);
+                        const url = await getDownloadURL(storageRef);
+                        setUploadedUrl(url);
                       }
-
-                      // use github to display image
                     }}
                   />
                   <ErrorMessage
                     name="image"
                     component="div"
-                    className="text-red-500"
+                    className="text-red-500 text-sm"
                   />
+                  {uploadedUrl && (
+                    <div className="relative h-full">
+                      <Image
+                        src={uploadedUrl}
+                        alt="Uploaded image"
+                        fill
+                        priority
+                        sizes="25vw"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
               <Button
