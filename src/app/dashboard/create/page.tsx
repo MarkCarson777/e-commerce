@@ -144,7 +144,7 @@ function Page() {
                     component="div"
                     className="text-red-500 text-sm"
                   />
-                  {uploadedUrl && (
+                  {uploadedUrl ? (
                     <div className="relative h-full">
                       <Image
                         src={uploadedUrl}
@@ -154,6 +154,8 @@ function Page() {
                         sizes="25vw"
                       />
                     </div>
+                  ) : (
+                    <div>Upload an image</div>
                   )}
                 </div>
               </div>
