@@ -14,7 +14,7 @@ function Page() {
 
   return (
     <main>
-      <div className="bg-gray-200 w-full flex justify-between items-center pr-2 pl-4 py-2">
+      <div className="bg-gray-200 w-full flex justify-between items-center pr-2 pl-4 py-2 min-h-16">
         <h1 className="text-2xl">All Products</h1>
         <div className="relative flex font-semibold h-12 justify-center items-center rounded-md text-white bg-blue-500 w-fit px-4">
           <Link href="/dashboard/create">Add product</Link>

@@ -3,6 +3,7 @@
 import { ReactElement } from "react";
 
 import CircleLeft from "./icons/circle-left.svg";
+import Home from "./icons/home.svg";
 
 export interface IconProps {
   icon: string;
@@ -17,6 +18,7 @@ interface IconComponents {
 
 const icons: IconComponents = {
   CircleLeft,
+  Home,
 };
 
 export const Icon = ({
