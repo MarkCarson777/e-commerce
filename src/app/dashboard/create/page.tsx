@@ -35,10 +35,9 @@ function Page() {
   const router = useRouter();
 
   return (
-    <>
+    <div className="bg-[#e8e8e9] min-h-screen">
       <Navbar />
-      <h1 className="text-2xl">Add a new product</h1>
-      <div className="flex flex-col h-screen w-full justify-center items-center">
+      <main className="h-screen w-full flex flex-col justify-center items-center">
         <Formik<Product>
           initialValues={{
             id: null,
@@ -79,58 +78,68 @@ function Page() {
           }}
         >
           {({ isSubmitting, setFieldValue }) => (
-            <Form className="flex flex-col gap-2">
-              <FormInput
-                name="name"
-                label="Name*"
-                type="text"
-                placeholder="Enter a product name"
-                autoComplete="off"
-              />
-              <FormInput name="price" label="Selling price(£)*" type="number" />
-              <FormInput
-                name="quantity"
-                label="Stock quantity*"
-                type="number"
-              />
-              <FormInput
-                name="description"
-                label="Description*"
-                placeholder="Describe the product"
-                type="textarea"
-                autoComplete="off"
-              />
-              {/* Add sizes and currency fields */}
-              <div className="flex flex-col">
-                <label className="text-sm" htmlFor="photo">
-                  Product image*
-                </label>
-                <input
-                  id="photo"
-                  className="pt-1 pb-2"
-                  type="file"
-                  onChange={(event) => {
-                    const file = event.target.files?.[0];
+            <Form className="w-11/12 rounded-2xl bg-white p-4">
+              <h1 className="text-2xl mb-4">Add a new product</h1>
+              <div className="flex gap-4">
+                <div className="flex flex-col gap-2 w-full">
+                  <FormInput
+                    name="name"
+                    label="Name*"
+                    type="text"
+                    placeholder="Enter a product name"
+                    autoComplete="off"
+                  />
+                  <FormInput
+                    name="price"
+                    label="Selling price(£)*"
+                    type="number"
+                  />
+                  <FormInput
+                    name="quantity"
+                    label="Stock quantity*"
+                    type="number"
+                  />
+                  <FormInput
+                    name="description"
+                    label="Description*"
+                    placeholder="Describe the product"
+                    type="textarea"
+                    autoComplete="off"
+                  />
+                </div>
+                {/* Add sizes and currency fields */}
+                <div className="flex flex-col">
+                  <label className="text-sm" htmlFor="photo">
+                    Product image*
+                  </label>
+                  <input
+                    id="photo"
+                    className="pt-1 pb-2"
+                    type="file"
+                    onChange={(event) => {
+                      const file = event.target.files?.[0];
 
-                    if (file) {
-                      setFieldValue("image", file, false);
-                    }
-                  }}
-                />
+                      if (file) {
+                        setFieldValue("image", file, false);
+                      }
+                    }}
+                  />
+                </div>
               </div>
               <Button
                 type="submit"
                 color="primary"
                 disabled={isSubmitting}
                 pending={isSubmitting}
+                className="w-full mt-4"
               >
                 <span>Add product</span>
               </Button>
             </Form>
           )}
         </Formik>
-      </div>
-    </>
+      </main>
+    </div>
   );
 }
 
