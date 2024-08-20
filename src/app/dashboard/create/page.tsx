@@ -38,6 +38,45 @@ function Page() {
   const { createProduct, getProducts } = useProductContext();
   const router = useRouter();
 
+  const onFileUpload = async (file: File, setFieldValue: Function) => {
+    const storageRef = ref(firebaseStorage, `images/${file.name}`);
+    await uploadBytes(storageRef, file);
+    const url = await getDownloadURL(storageRef);
+    setFieldValue("image", file, false);
+    setUploadedUrl(url);
+  };
+
+  const onSubmit = async (
+    values: Product,
+    { setSubmitting, setErrors }: any
+  ) => {
+    if (!values.image) {
+      setErrors({ image: "An image is required" });
+      setSubmitting(false);
+      return;
+    }
+
+    const storageRef = ref(firebaseStorage, `images/${values.image.name}`);
+    try {
+      const url = await getDownloadURL(storageRef);
+      values.image = url;
+
+      const { result, error } = await createProduct(values);
+
+      if (error) throw new Error(error);
+
+      if (result) {
+        console.log("Product created with ID:", result.id);
+        await getProducts();
+        router.push("/dashboard");
+      }
+    } catch (error) {
+      console.error("Error creating product", error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="bg-[#e8e8e9] min-h-screen">
       <Navbar />
@@ -54,39 +93,7 @@ function Page() {
             image: null,
           }}
           validationSchema={toFormikValidationSchema(CreateProductSchema)}
-          onSubmit={async (values: Product, { setSubmitting, setErrors }) => {
-            if (!values.image) {
-              setErrors({ image: "An image is required" });
-              setSubmitting(false);
-              return;
-            }
-
-            const storageRef = ref(
-              firebaseStorage,
-              `images/${values.image.name}`
-            );
-
-            try {
-              const url = await getDownloadURL(storageRef);
-              values.image = url;
-
-              const { result, error } = await createProduct(values);
-
-              if (error) {
-                throw new Error(error);
-              }
-
-              if (result) {
-                console.log("Product created with ID:", result.id);
-                await getProducts();
-                return router.push("/dashboard");
-              }
-            } catch (error) {
-              console.error("Error creating product", error);
-            } finally {
-              setSubmitting(false);
-            }
-          }}
+          onSubmit={onSubmit}
         >
           {({ isSubmitting, setFieldValue }) => (
             <Form className="w-11/12 rounded-2xl bg-white p-4">
@@ -129,17 +136,7 @@ function Page() {
                     type="file"
                     onChange={async (event) => {
                       const file = event.target.files?.[0];
-
-                      if (file) {
-                        setFieldValue("image", file, false);
-                        const storageRef = ref(
-                          firebaseStorage,
-                          `images/${file.name}`
-                        );
-                        await uploadBytes(storageRef, file);
-                        const url = await getDownloadURL(storageRef);
-                        setUploadedUrl(url);
-                      }
+                      if (file) onFileUpload(file, setFieldValue);
                     }}
                   />
                   <ErrorMessage
