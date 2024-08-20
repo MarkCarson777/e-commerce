@@ -19,7 +19,7 @@ export function Sidebar(props: SidebarProps) {
 
   const tabs: TabProps[] = [
     { name: "STORE MANAGEMENT", path: "/dashboard" },
-    { name: "ORDER MANAGEMENT", path: "#" },
+    { name: "ORDER MANAGEMENT", path: "/dashboard/orders" },
     { name: "SETTINGS", path: "/dashboard/settings" },
   ];
 
