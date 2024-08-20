@@ -1,5 +1,10 @@
-import clsx from "clsx";
+"use client";
 
-export default function Page() {
-  return <h1>Settings</h1>;
+// Routing
+import { AuthRoute } from "@/containers/AuthRoute";
+
+function Page() {
+  return <main>Settings</main>;
 }
+
+export default AuthRoute(Page);
