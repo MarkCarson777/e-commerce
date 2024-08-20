@@ -6,7 +6,7 @@ type ButtonProps = {
   color: "primary" | "danger";
   pending?: boolean;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   className?: string;
 };
 

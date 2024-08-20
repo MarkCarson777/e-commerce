@@ -2,6 +2,7 @@ import clsx from "clsx";
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/Button";
 
@@ -16,6 +17,7 @@ type ProductCardProps = {
 
 export function ProductCard(props: ProductCardProps) {
   const { product, className } = props;
+  const router = useRouter();
 
   return (
     <Link href={`/products/${product.id}`}>
@@ -39,7 +41,7 @@ export function ProductCard(props: ProductCardProps) {
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              console.log("Edit");
+              router.push(`/dashboard/edit/${product.id}`);
             }}
           >
             <span>Edit</span>
