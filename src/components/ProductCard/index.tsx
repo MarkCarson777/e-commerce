@@ -24,7 +24,12 @@ export function ProductCard(props: ProductCardProps) {
 
   return (
     <Link href={`/products/${product.id}`}>
-      <article className={clsx("flex flex-col border-2", className)}>
+      <article
+        className={clsx(
+          "flex flex-col border-2 border-black rounded-2xl overflow-clip",
+          className
+        )}
+      >
         <figure className="relative h-64 w-full">
           <Image
             src={product.image || placeholder}
@@ -34,40 +39,42 @@ export function ProductCard(props: ProductCardProps) {
             priority
           />
         </figure>
-        <h2>{product.name}</h2>
-        <p>£{product.price}</p>
-        <p>{product.description}</p>
-        <div className="flex justify-end">
-          <Button
-            type="button"
-            color="primary"
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              router.push(`/dashboard/edit/${product.id}`);
-            }}
-          >
-            <span>Edit</span>
-          </Button>
-          <Button
-            type="button"
-            color="danger"
-            onClick={async (e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              try {
-                const { error } = await deleteProduct(product.id);
-                if (error) {
+        <div className="p-2">
+          <h2>{product.name}</h2>
+          <p>£{product.price}</p>
+          <p>{product.description}</p>
+          <div className="flex gap-2 justify-end">
+            <Button
+              type="button"
+              color="primary"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                router.push(`/dashboard/edit/${product.id}`);
+              }}
+            >
+              <span>Edit</span>
+            </Button>
+            <Button
+              type="button"
+              color="danger"
+              onClick={async (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                try {
+                  const { error } = await deleteProduct(product.id);
+                  if (error) {
+                    console.error(error);
+                  }
+                } catch (error) {
                   console.error(error);
                 }
-              } catch (error) {
-                console.error(error);
-              }
-              console.log("Deleted product", product.id);
-            }}
-          >
-            <span>Remove</span>
-          </Button>
+                console.log("Deleted product", product.id);
+              }}
+            >
+              <span>Remove</span>
+            </Button>
+          </div>
         </div>
       </article>
     </Link>
