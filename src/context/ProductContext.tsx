@@ -4,7 +4,7 @@ import {
   collection,
   addDoc,
   getDocs,
-  deleteDoc,
+  updateDoc,
   CollectionReference,
   QueryDocumentSnapshot,
   WithFieldValue,
@@ -51,18 +51,23 @@ export const ProductContextProvider = ({
   const getProducts = async () => {
     const querySnapshot = await getDocs(collection(firestore, "products"));
 
-    const products = querySnapshot.docs.map(async (doc) => {
-      const id = doc.id;
-      const data = doc.data() as Product;
+    const products = querySnapshot.docs
+      .filter((doc) => {
+        const data = doc.data();
+        return !data.deleted;
+      })
+      .map(async (doc) => {
+        const id = doc.id;
+        const data = doc.data() as Product;
 
-      if (typeof data.image !== "string") {
-        throw new Error("image path is not a string");
-      }
+        if (typeof data.image !== "string") {
+          throw new Error("image path is not a string");
+        }
 
-      const imageUrl = await getDownloadURL(ref(firebaseStorage, data.image));
+        const imageUrl = await getDownloadURL(ref(firebaseStorage, data.image));
 
-      return { ...data, id, imageUrl };
-    });
+        return { ...data, id, imageUrl };
+      });
 
     const productsWithImages = await Promise.all(products);
 
@@ -106,7 +111,9 @@ export const ProductContextProvider = ({
     const ref = doc(firestore, "products", id);
 
     try {
-      await deleteDoc(ref);
+      await updateDoc(ref, {
+        deleted: true,
+      });
       console.log("Product deleted");
     } catch (error) {
       throw new Error((error as Error).message);
