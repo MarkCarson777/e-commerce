@@ -61,16 +61,8 @@ function Page() {
     try {
       const url = await getDownloadURL(storageRef);
       values.image = url;
-
-      const { result, error } = await createProduct(values);
-
-      if (error) throw new Error(error);
-
-      if (result) {
-        console.log("Product created with ID:", result.id);
-        await getProducts();
-        router.push("/dashboard");
-      }
+      await createProduct(values);
+      router.push("/dashboard");
     } catch (error) {
       console.error("Error creating product", error);
     } finally {
@@ -88,7 +80,6 @@ function Page() {
       </div>
       <Formik<Product>
         initialValues={{
-          id: null,
           name: "",
           price: 0,
           quantity: 0,

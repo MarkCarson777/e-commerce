@@ -22,16 +22,14 @@ type ProductContextProviderProps = {
 type ProductContextType = {
   products: Product[];
   getProducts: () => Promise<void>;
-  createProduct: (
-    product: Product
-  ) => Promise<{ result: Product | null; error: string | null }>;
+  createProduct: (product: Product) => Promise<void>;
   deleteProduct: (id: string | null) => Promise<{ error: string | null }>;
 };
 
 export const ProductContext = createContext<ProductContextType>({
   products: [],
   getProducts: async () => {},
-  createProduct: async () => ({ result: null, error: null }),
+  createProduct: async () => {},
   deleteProduct: async () => ({ error: null }),
 });
 
@@ -77,8 +75,6 @@ export const ProductContextProvider = ({
   }, []);
 
   const createProduct = async (product: Product) => {
-    let result: Product | null = null;
-    let error: string | null = null;
     const ref: CollectionReference<Product> = collection(
       firestore,
       "products"
@@ -96,16 +92,15 @@ export const ProductContextProvider = ({
       };
 
       try {
-        const docRef: DocumentReference = await addDoc(ref, _product);
-        result = { ...product, id: docRef.id };
-      } catch (err) {
-        error = (err as Error).message;
+        await addDoc(ref, _product);
+        console.log("Product created");
+        await getProducts();
+      } catch (error) {
+        throw new Error((error as Error).message);
       }
     } else {
-      error = "User is not authenticated";
+      throw new Error("User is not authenticated");
     }
-
-    return { result, error };
   };
 
   const deleteProduct = async (id: string | null) => {
