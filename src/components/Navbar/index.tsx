@@ -2,8 +2,11 @@
 
 import clsx from "clsx";
 
+import { useState, useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 import { useAuthContext } from "@/context/AuthContext";
+import { useUserContext } from "@/context/UserContext";
 
 import Link from "next/link";
 
@@ -15,8 +18,25 @@ type NavbarProps = {
 
 export function Navbar(props: NavbarProps) {
   const { className } = props;
+  const [userRole, setUserRole] = useState<string | null>(null);
   const { currentUser } = useAuthContext();
+  const { getUser } = useUserContext();
   const router = useRouter();
+
+  useEffect(() => {
+    if (currentUser) {
+      const fetchUser = async () => {
+        try {
+          const result = await getUser(currentUser.uid);
+          setUserRole(result.role);
+        } catch (error) {
+          console.error("Error fetching user", error);
+        }
+      };
+
+      fetchUser();
+    }
+  }, [currentUser]);
 
   return (
     <nav className={clsx("bg-gray-800 p-4 w-full h-[56px]", className)}>
@@ -51,7 +71,16 @@ export function Navbar(props: NavbarProps) {
             </Link>
           </li>
           <li>
-            <Link href="/signin" className="text-gray-300 hover:text-white">
+            <Link
+              href={
+                currentUser === null
+                  ? "/signin"
+                  : userRole === "user"
+                  ? "/account"
+                  : "/dashboard"
+              }
+              className="text-gray-300 hover:text-white"
+            >
               USER
             </Link>
           </li>
@@ -60,11 +89,7 @@ export function Navbar(props: NavbarProps) {
               CART
             </Link>
           </li>
-          <li>
-            <Link href="/dashboard" className="text-gray-300 hover:text-white">
-              DASHBOARD
-            </Link>
-          </li>
+
           {currentUser !== null && (
             <button
               type="button"
