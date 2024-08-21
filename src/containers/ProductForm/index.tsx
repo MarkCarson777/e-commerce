@@ -41,24 +41,6 @@ export function ProductForm(props: ProductFormProps) {
   const { getProduct, createProduct } = useProductContext();
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchProduct = async () => {
-      if (productId) {
-        try {
-          const productData = await getProduct(productId);
-          console.log("productData", productData);
-          if (productData.image) {
-            setUploadedUrl(productData.image);
-          }
-        } catch (error) {
-          console.error("Error getting product", error);
-        }
-      }
-    };
-
-    fetchProduct();
-  }, [productId]);
-
   const onFileUpload = async (file: File, setFieldValue: Function) => {
     const storageRef = ref(firebaseStorage, `images/${file.name}`);
     await uploadBytes(storageRef, file);
@@ -97,83 +79,115 @@ export function ProductForm(props: ProductFormProps) {
         price: 0,
         quantity: 0,
         description: "",
-        sizes: [],
-        currency: "",
+        // sizes: [],
+        // currency: "",
         image: null,
       }}
       validationSchema={toFormikValidationSchema(CreateProductSchema)}
       onSubmit={onSubmit}
     >
-      {({ isSubmitting, setFieldValue }) => (
-        <Form className={clsx("w-11/12 rounded-2xl bg-white p-4", className)}>
-          <div className="flex gap-4">
-            <div className="flex flex-col gap-2 w-full">
-              <FormInput
-                name="name"
-                label="Name*"
-                type="text"
-                placeholder="Enter a product name"
-                autoComplete="off"
-              />
-              <FormInput name="price" label="Selling price(£)*" type="number" />
-              <FormInput
-                name="quantity"
-                label="Stock quantity*"
-                type="number"
-              />
-              <FormInput
-                name="description"
-                label="Description*"
-                placeholder="Describe the product"
-                type="textarea"
-                autoComplete="off"
-              />
+      {({ isSubmitting, setFieldValue, setValues }) => {
+        useEffect(() => {
+          const fetchProduct = async () => {
+            if (productId) {
+              try {
+                const productData = await getProduct(productId);
+
+                setValues({
+                  name: productData.name,
+                  price: productData.price,
+                  quantity: productData.quantity,
+                  description: productData.description,
+                  image: null,
+                });
+
+                if (productData.image) {
+                  setUploadedUrl(productData.image);
+                }
+              } catch (error) {
+                console.error("Error getting product", error);
+              }
+            }
+          };
+
+          fetchProduct();
+        }, [productId]);
+
+        return (
+          <Form className={clsx("w-11/12 rounded-2xl bg-white p-4", className)}>
+            <div className="flex gap-4">
+              <div className="flex flex-col gap-2 w-full">
+                <FormInput
+                  name="name"
+                  label="Name*"
+                  type="text"
+                  placeholder="Enter a product name"
+                  autoComplete="off"
+                />
+                <FormInput
+                  name="price"
+                  label="Selling price(£)*"
+                  type="number"
+                />
+                <FormInput
+                  name="quantity"
+                  label="Stock quantity*"
+                  type="number"
+                />
+                <FormInput
+                  name="description"
+                  label="Description*"
+                  placeholder="Describe the product"
+                  type="textarea"
+                  autoComplete="off"
+                />
+              </div>
+              {/* Add sizes and currency fields */}
+              <div className="flex flex-col">
+                <label className="text-sm" htmlFor="photo">
+                  Product image*
+                </label>
+                <input
+                  id="photo"
+                  className="pt-1 pb-2"
+                  type="file"
+                  onChange={async (event) => {
+                    const file = event.target.files?.[0];
+                    if (file) onFileUpload(file, setFieldValue);
+                  }}
+                />
+                <ErrorMessage
+                  name="image"
+                  component="div"
+                  className="text-red-500 text-sm"
+                />
+                {uploadedUrl ? (
+                  <div className="relative h-full">
+                    <Image
+                      src={uploadedUrl}
+                      alt="Uploaded image"
+                      fill
+                      priority
+                      sizes="25vw"
+                    />
+                  </div>
+                ) : (
+                  <div>Upload an image</div>
+                )}
+              </div>
             </div>
-            {/* Add sizes and currency fields */}
-            <div className="flex flex-col">
-              <label className="text-sm" htmlFor="photo">
-                Product image*
-              </label>
-              <input
-                id="photo"
-                className="pt-1 pb-2"
-                type="file"
-                onChange={async (event) => {
-                  const file = event.target.files?.[0];
-                  if (file) onFileUpload(file, setFieldValue);
-                }}
-              />
-              <ErrorMessage
-                name="image"
-                component="div"
-                className="text-red-500 text-sm"
-              />
-              {uploadedUrl ? (
-                <div className="relative h-full">
-                  <Image
-                    src={uploadedUrl}
-                    alt="Uploaded image"
-                    fill
-                    priority
-                    sizes="25vw"
-                  />
-                </div>
-              ) : (
-                <div>Upload an image</div>
-              )}
-            </div>
-          </div>
-          <Button
-            type="submit"
-            color="primary"
-            disabled={isSubmitting}
-            pending={isSubmitting}
-            className="w-full mt-4"
-          >
-            <span>Add product</span>
-          </Button>
-        </Form>
-      )}
+            <Button
+              type="submit"
+              color="primary"
+              disabled={isSubmitting}
+              pending={isSubmitting}
+              className="w-full mt-4"
+            >
+              <span>Add product</span>
+            </Button>
+          </Form>
+        );
+      }}
     </Formik>
   );
 }
