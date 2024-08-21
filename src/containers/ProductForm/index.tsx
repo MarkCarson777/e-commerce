@@ -1,5 +1,5 @@
 // React
-import { useState } from "react";
+import { useState, useEffect } from "react";
 // Next
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -38,10 +38,26 @@ const CreateProductSchema = z.object({
 export function ProductForm(props: ProductFormProps) {
   const { productId, className } = props;
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
-  const { createProduct } = useProductContext();
+  const { getProduct, createProduct } = useProductContext();
   const router = useRouter();
 
-  console.log("edit", productId);
+  useEffect(() => {
+    const fetchProduct = async () => {
+      if (productId) {
+        try {
+          const productData = await getProduct(productId);
+          console.log("productData", productData);
+          if (productData.image) {
+            setUploadedUrl(productData.image);
+          }
+        } catch (error) {
+          console.error("Error getting product", error);
+        }
+      }
+    };
+
+    fetchProduct();
+  }, [productId]);
 
   const onFileUpload = async (file: File, setFieldValue: Function) => {
     const storageRef = ref(firebaseStorage, `images/${file.name}`);

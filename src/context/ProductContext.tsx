@@ -59,7 +59,7 @@ export const ProductContextProvider = ({
       const data = docSnap.data() as Product;
 
       if (typeof data.image !== "string") {
-        throw new Error("image path is not a string");
+        throw new Error("Invalid type for image");
       }
 
       const imageUrl = await getDownloadURL(ref(firebaseStorage, data.image));
@@ -83,7 +83,7 @@ export const ProductContextProvider = ({
         const data = doc.data() as Product;
 
         if (typeof data.image !== "string") {
-          throw new Error("Image path is not a string");
+          throw new Error("Invalid type for image");
         }
 
         const imageUrl = await getDownloadURL(ref(firebaseStorage, data.image));

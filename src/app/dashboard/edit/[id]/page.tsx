@@ -11,9 +11,7 @@ import { Icon } from "@/components/Icon";
 import { ProductForm } from "@/containers/ProductForm";
 
 function Page() {
-  const { id } = useParams();
-
-  console.log("edit", id);
+  const { id } = useParams<{ id: string }>();
 
   return (
     <main className="h-screen w-full flex flex-col">
@@ -23,7 +21,7 @@ function Page() {
         </Link>
         <h1 className="text-2xl">Edit product</h1>
       </div>
-      <ProductForm />
+      <ProductForm productId={id} />
     </main>
   );
 }
