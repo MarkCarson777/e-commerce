@@ -2,13 +2,11 @@ import clsx from "clsx";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 
 import { Button } from "@/components/Button";
 
 import { useProductContext } from "@/context/ProductContext";
-
-import placeholder from "/public/images/carouselOne.jpg";
 
 import { Product } from "@/types";
 
@@ -21,6 +19,7 @@ export function ProductCard(props: ProductCardProps) {
   const { product, className } = props;
   const { deleteProduct } = useProductContext();
   const router = useRouter();
+  const path = usePathname();
 
   return (
     <Link href={`/products/${product.id}`}>
@@ -32,7 +31,7 @@ export function ProductCard(props: ProductCardProps) {
       >
         <figure className="relative h-64 w-full">
           <Image
-            src={product.image || placeholder}
+            src={product.image}
             alt={product.name}
             fill
             sizes="20vw"
@@ -43,38 +42,40 @@ export function ProductCard(props: ProductCardProps) {
           <h2>{product.name}</h2>
           <p>£{product.price}</p>
           <p>{product.description}</p>
-          <div className="flex gap-2 justify-end">
-            <Button
-              type="button"
-              color="primary"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                router.push(`/dashboard/edit/${product.id}`);
-              }}
-            >
-              <span>Edit</span>
-            </Button>
-            <Button
-              type="button"
-              color="danger"
-              onClick={async (e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                try {
-                  const { error } = await deleteProduct(product.id);
-                  if (error) {
+          {path === "/dashboard" && (
+            <div className="flex gap-2 justify-end">
+              <Button
+                type="button"
+                color="primary"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  router.push(`/dashboard/edit/${product.id}`);
+                }}
+              >
+                <span>Edit</span>
+              </Button>
+              <Button
+                type="button"
+                color="danger"
+                onClick={async (e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  try {
+                    const { error } = await deleteProduct(product.id);
+                    if (error) {
+                      console.error(error);
+                    }
+                  } catch (error) {
                     console.error(error);
                   }
-                } catch (error) {
-                  console.error(error);
-                }
-                console.log("Deleted product", product.id);
-              }}
-            >
-              <span>Remove</span>
-            </Button>
-          </div>
+                  console.log("Deleted product", product.id);
+                }}
+              >
+                <span>Remove</span>
+              </Button>
+            </div>
+          )}
         </div>
       </article>
     </Link>

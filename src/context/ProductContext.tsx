@@ -1,5 +1,4 @@
 import { createContext, useContext, useState, useEffect } from "react";
-import { firestore } from "@/firebase/config";
 import {
   doc,
   collection,
@@ -10,8 +9,9 @@ import {
   DocumentReference,
   QueryDocumentSnapshot,
   WithFieldValue,
+  serverTimestamp,
 } from "firebase/firestore";
-import { firebaseStorage } from "@/firebase/config";
+import { firestore, firebaseAuth, firebaseStorage } from "@/firebase/config";
 import { ref, getDownloadURL } from "firebase/storage";
 import { Product } from "@/types";
 
@@ -84,11 +84,25 @@ export const ProductContextProvider = ({
       "products"
     ).withConverter(dataConverter);
 
-    try {
-      const docRef: DocumentReference = await addDoc(ref, product);
-      result = { ...product, id: docRef.id };
-    } catch (err) {
-      error = (err as Error).message;
+    const user = firebaseAuth.currentUser;
+
+    if (user) {
+      const _product = {
+        ...product,
+        createdBy: user.uid,
+        createdAt: serverTimestamp(),
+        modifiedBy: user.uid,
+        deleted: false,
+      };
+
+      try {
+        const docRef: DocumentReference = await addDoc(ref, _product);
+        result = { ...product, id: docRef.id };
+      } catch (err) {
+        error = (err as Error).message;
+      }
+    } else {
+      error = "User is not authenticated";
     }
 
     return { result, error };
