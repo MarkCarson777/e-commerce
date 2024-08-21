@@ -9,8 +9,6 @@ import Link from "next/link";
 
 import { signOut } from "@/firebase/auth";
 
-import { Button } from "@/components/Button";
-
 type NavbarProps = {
   className?: string;
 };
@@ -68,16 +66,15 @@ export function Navbar(props: NavbarProps) {
             </Link>
           </li>
           {currentUser !== null && (
-            <Button
+            <button
               type="button"
-              color="danger"
               onClick={() => {
                 signOut();
                 router.push("/");
               }}
             >
               <span>Sign out</span>
-            </Button>
+            </button>
           )}
         </ul>
       </div>
