@@ -3,6 +3,7 @@ import {
   doc,
   collection,
   addDoc,
+  getDoc,
   getDocs,
   updateDoc,
   CollectionReference,
@@ -20,6 +21,7 @@ type ProductContextProviderProps = {
 
 type ProductContextType = {
   products: Product[];
+  getProduct: (id: string) => Promise<Product>;
   getProducts: () => Promise<void>;
   createProduct: (product: Product) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
@@ -27,6 +29,7 @@ type ProductContextType = {
 
 export const ProductContext = createContext<ProductContextType>({
   products: [],
+  getProduct: async () => ({} as Product),
   getProducts: async () => {},
   createProduct: async () => {},
   deleteProduct: async () => {},
@@ -48,6 +51,25 @@ export const ProductContextProvider = ({
 }: ProductContextProviderProps) => {
   const [products, setProducts] = useState<Product[]>([]);
 
+  const getProduct = async (id: string) => {
+    const docRef = doc(firestore, "products", id);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+      const data = docSnap.data() as Product;
+
+      if (typeof data.image !== "string") {
+        throw new Error("image path is not a string");
+      }
+
+      const imageUrl = await getDownloadURL(ref(firebaseStorage, data.image));
+
+      return { ...data, imageUrl };
+    } else {
+      throw new Error("No such document");
+    }
+  };
+
   const getProducts = async () => {
     const querySnapshot = await getDocs(collection(firestore, "products"));
 
@@ -61,7 +83,7 @@ export const ProductContextProvider = ({
         const data = doc.data() as Product;
 
         if (typeof data.image !== "string") {
-          throw new Error("image path is not a string");
+          throw new Error("Image path is not a string");
         }
 
         const imageUrl = await getDownloadURL(ref(firebaseStorage, data.image));
@@ -124,7 +146,13 @@ export const ProductContextProvider = ({
 
   return (
     <ProductContext.Provider
-      value={{ createProduct, deleteProduct, getProducts, products }}
+      value={{
+        createProduct,
+        deleteProduct,
+        getProduct,
+        getProducts,
+        products,
+      }}
     >
       {children}
     </ProductContext.Provider>
