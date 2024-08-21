@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 import { Button } from "@/components/Button";
+import { User as FirebaseUser } from "firebase/auth";
+import { useUserContext } from "@/context/UserContext";
 
 type SignUpValues = {
   email: string;
@@ -34,6 +36,7 @@ const SignUpSchema = z
   });
 
 export default function Page() {
+  const { createUser } = useUserContext();
   const router = useRouter();
 
   return (
@@ -43,6 +46,11 @@ export default function Page() {
         validationSchema={toFormikValidationSchema(SignUpSchema)}
         onSubmit={async (values: SignUpValues) => {
           const { result, error } = await signUp(values.email, values.password);
+
+          if (result) {
+            const user: FirebaseUser = result.user;
+            await createUser(user);
+          }
 
           if (error) {
             return console.log("Error signing up user", error);

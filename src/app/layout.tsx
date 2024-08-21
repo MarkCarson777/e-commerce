@@ -3,6 +3,7 @@
 import "./globals.css";
 import { AuthContextProvider } from "@/context/AuthContext";
 import { ProductContextProvider } from "@/context/ProductContext";
+import { UserContextProvider } from "@/context/UserContext";
 
 export default function RootLayout({
   children,
@@ -13,7 +14,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <AuthContextProvider>
-          <ProductContextProvider>{children}</ProductContextProvider>
+          <UserContextProvider>
+            <ProductContextProvider>{children}</ProductContextProvider>
+          </UserContextProvider>
         </AuthContextProvider>
       </body>
     </html>
