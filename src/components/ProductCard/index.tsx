@@ -61,15 +61,11 @@ export function ProductCard(props: ProductCardProps) {
                 onClick={async (e) => {
                   e.preventDefault();
                   e.stopPropagation();
-                  try {
-                    const { error } = await deleteProduct(product.id);
-                    if (error) {
-                      console.error(error);
-                    }
-                  } catch (error) {
-                    console.error(error);
+                  if (product.id) {
+                    await deleteProduct(product.id);
+                  } else {
+                    console.error("Product id is missing");
                   }
-                  console.log("Deleted product", product.id);
                 }}
               >
                 <span>Remove</span>

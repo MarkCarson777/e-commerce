@@ -6,7 +6,6 @@ import {
   getDocs,
   deleteDoc,
   CollectionReference,
-  DocumentReference,
   QueryDocumentSnapshot,
   WithFieldValue,
   serverTimestamp,
@@ -23,14 +22,14 @@ type ProductContextType = {
   products: Product[];
   getProducts: () => Promise<void>;
   createProduct: (product: Product) => Promise<void>;
-  deleteProduct: (id: string | null) => Promise<{ error: string | null }>;
+  deleteProduct: (id: string) => Promise<void>;
 };
 
 export const ProductContext = createContext<ProductContextType>({
   products: [],
   getProducts: async () => {},
   createProduct: async () => {},
-  deleteProduct: async () => ({ error: null }),
+  deleteProduct: async () => {},
 });
 
 export const useProductContext = () => useContext(ProductContext);
@@ -103,24 +102,17 @@ export const ProductContextProvider = ({
     }
   };
 
-  const deleteProduct = async (id: string | null) => {
-    let error: string | null = null;
-
-    if (id === null) {
-      error = "Product ID cannot be null";
-      return { error };
-    }
-
+  const deleteProduct = async (id: string) => {
     const ref = doc(firestore, "products", id);
 
     try {
       await deleteDoc(ref);
-    } catch (err) {
-      error = (err as Error).message;
+      console.log("Product deleted");
+    } catch (error) {
+      throw new Error((error as Error).message);
     }
 
     await getProducts();
-    return { error };
   };
 
   return (
