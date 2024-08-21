@@ -24,6 +24,7 @@ type ProductContextType = {
   getProduct: (id: string) => Promise<Product>;
   getProducts: () => Promise<void>;
   createProduct: (product: Product) => Promise<void>;
+  updateProduct: (id: string, product: Product) => Promise<void>;
   deleteProduct: (id: string) => Promise<void>;
 };
 
@@ -32,6 +33,7 @@ export const ProductContext = createContext<ProductContextType>({
   getProduct: async () => ({} as Product),
   getProducts: async () => {},
   createProduct: async () => {},
+  updateProduct: async () => {},
   deleteProduct: async () => {},
 });
 
@@ -129,6 +131,22 @@ export const ProductContextProvider = ({
     }
   };
 
+  const updateProduct = async (id: string, product: Product) => {
+    const ref = doc(firestore, "products", id);
+
+    try {
+      await updateDoc(ref, {
+        ...product,
+        modifiedBy: firebaseAuth.currentUser?.uid,
+      });
+      console.log("Product updated");
+    } catch (error) {
+      throw new Error((error as Error).message);
+    }
+
+    await getProducts();
+  };
+
   const deleteProduct = async (id: string) => {
     const ref = doc(firestore, "products", id);
 
@@ -147,11 +165,12 @@ export const ProductContextProvider = ({
   return (
     <ProductContext.Provider
       value={{
-        createProduct,
-        deleteProduct,
+        products,
         getProduct,
         getProducts,
-        products,
+        createProduct,
+        updateProduct,
+        deleteProduct,
       }}
     >
       {children}

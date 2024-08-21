@@ -38,7 +38,7 @@ const CreateProductSchema = z.object({
 export function ProductForm(props: ProductFormProps) {
   const { productId, className } = props;
   const [uploadedUrl, setUploadedUrl] = useState<string | null>(null);
-  const { getProduct, createProduct } = useProductContext();
+  const { getProduct, createProduct, updateProduct } = useProductContext();
   const router = useRouter();
 
   const onFileUpload = async (file: File, setFieldValue: Function) => {
@@ -56,14 +56,28 @@ export function ProductForm(props: ProductFormProps) {
     if (!values.image) {
       setErrors({ image: "An image is required" });
       setSubmitting(false);
-      return;
     }
 
-    const storageRef = ref(firebaseStorage, `images/${values.image.name}`);
+    if (values.image instanceof File) {
+      const storageRef = ref(firebaseStorage, `images/${values.image.name}`);
+
+      try {
+        const url = await getDownloadURL(storageRef);
+        values.image = url;
+      } catch (error) {
+        console.error("Error getting image URL", error);
+        setSubmitting(false);
+      }
+    } else {
+      values.image = uploadedUrl;
+    }
+
     try {
-      const url = await getDownloadURL(storageRef);
-      values.image = url;
-      await createProduct(values);
+      if (productId) {
+        await updateProduct(productId, values);
+      } else {
+        await createProduct(values);
+      }
       router.push("/dashboard");
     } catch (error) {
       console.error("Error creating product", error);
@@ -98,7 +112,7 @@ export function ProductForm(props: ProductFormProps) {
                   price: productData.price,
                   quantity: productData.quantity,
                   description: productData.description,
-                  image: null,
+                  image: productData.image,
                 });
 
                 if (productData.image) {
