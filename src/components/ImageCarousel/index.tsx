@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import clsx from "clsx";
 
@@ -27,13 +27,23 @@ export function ImageCarousel(props: ImageCarouselProps) {
     );
   };
 
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setCurrentIndex((prevIndex) => {
+        return prevIndex >= images.length - 1 ? 0 : prevIndex + 1;
+      });
+    }, 5000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   return (
     <div
       className={clsx("relative w-full", className)}
       style={{ height: `calc(100vh - 56px)` }}
     >
       <div
-        className="flex transition-transform duration-500 h-full"
+        className="flex transition-transform duration-1000 h-full"
         style={{
           transform: `translateX(-${currentIndex * 100}%)`,
         }}
