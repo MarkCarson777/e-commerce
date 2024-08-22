@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
+import Link from "next/link";
 import clsx from "clsx";
 
 import Image, { StaticImageData } from "next/image";
@@ -86,6 +86,16 @@ export function ImageCarousel(props: ImageCarouselProps) {
           className="hover:scale-110 transition-scale duration-200"
         />
       </button>
+      <Link href="/products">
+        <div className="absolute flex flex-col top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 gap-4 items-center">
+          <span className="text-8xl font-tangerine font-semibold">
+            Last Chance
+          </span>
+          <button className="uppercase text-montserrat text-xl border-2 border-black px-8 py-3 hover:bg-white w-fit">
+            Shop now
+          </button>
+        </div>
+      </Link>
     </div>
   );
 }

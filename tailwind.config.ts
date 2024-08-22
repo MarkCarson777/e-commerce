@@ -15,6 +15,8 @@ const config: Config = {
       },
       fontFamily: {
         montserrat: ["Montserrat", "sans-serif"],
+        garamond: ["Cormorant Garamond", "serif"],
+        tangerine: ["Tangerine", "cursive"],
       },
     },
   },
