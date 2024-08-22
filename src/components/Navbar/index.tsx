@@ -13,7 +13,7 @@ import { useUserContext } from "@/context/UserContext";
 // Components
 import { Icon } from "@/components/Icon";
 // Images
-import apollaLogo from "/public/images/apolla.png";
+import apolaLogo from "/public/images/apola.png";
 // Types
 import { User } from "@/types";
 
@@ -52,7 +52,7 @@ export function Navbar(props: NavbarProps) {
       <ul className="flex items-center gap-8">
         <li>
           <Link href="/">
-            <Image src={apollaLogo} alt="Apolla Showroom" width={72} />
+            <Image src={apolaLogo} alt="Apola Showroom" width={72} />
           </Link>
         </li>
         <li>
@@ -80,7 +80,7 @@ export function Navbar(props: NavbarProps) {
       <div className="flex items-center justify-center">
         <Link href="/">
           <span className="uppercase font-montserrat text-2xl tracking-[8px] font-medium">
-            Apolla Showroom
+            Apola Showroom
           </span>
         </Link>
       </div>
