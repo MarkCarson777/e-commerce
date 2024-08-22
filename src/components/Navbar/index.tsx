@@ -12,13 +12,15 @@ import Link from "next/link";
 
 import { signOut } from "@/firebase/auth";
 
+import { User } from "@/types";
+
 type NavbarProps = {
   className?: string;
 };
 
 export function Navbar(props: NavbarProps) {
   const { className } = props;
-  const [userRole, setUserRole] = useState<string | null>(null);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const { currentUser } = useAuthContext();
   const { getUser } = useUserContext();
   const router = useRouter();
@@ -27,8 +29,8 @@ export function Navbar(props: NavbarProps) {
     if (currentUser) {
       const fetchUser = async () => {
         try {
-          const result = await getUser(currentUser.uid);
-          setUserRole(result.role);
+          const result: User = await getUser(currentUser.uid);
+          setIsAdmin(result.isAdmin);
         } catch (error) {
           console.error("Error fetching user", error);
         }
@@ -75,9 +77,9 @@ export function Navbar(props: NavbarProps) {
               href={
                 currentUser === null
                   ? "/signin"
-                  : userRole === "user"
-                  ? "/account"
-                  : "/dashboard"
+                  : isAdmin
+                  ? "/dashboard"
+                  : "/account"
               }
               className="text-gray-300 hover:text-white"
             >

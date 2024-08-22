@@ -1,3 +1,8 @@
+export type User = {
+  email: string;
+  isAdmin: boolean;
+};
+
 export type Product = {
   id?: string;
   name: string;

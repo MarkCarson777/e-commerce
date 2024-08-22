@@ -39,7 +39,7 @@ export const UserContextProvider = ({ children }: UserContextProviderProps) => {
 
       await setDoc(userRef, {
         email: user.email,
-        role: "user",
+        isAdmin: false,
       });
     } catch (error) {
       throw new Error((error as Error).message);
