@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import clsx from "clsx";
 
 import { Icon } from "@/components/Icon";
+import { PositionIndicator } from "@/components/SlideCarousel/PositionIndicator";
 import { Slide } from "@/components/SlideCarousel/Slide";
 
 import carouselOne from "/public/images/carouselOne.jpg";
@@ -115,6 +116,11 @@ export function SlideCarousel(props: SlideCarouselProps) {
           className="hover:-translate-x-2 hover:scale-105 duration-200"
         />
       </button>
+      <PositionIndicator
+        slides={slides}
+        currentIndex={currentIndex}
+        setCurrentIndex={setCurrentIndex}
+      />
     </div>
   );
 }
