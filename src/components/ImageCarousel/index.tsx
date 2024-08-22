@@ -10,10 +10,11 @@ import { Icon } from "@/components/Icon";
 type ImageCarouselProps = {
   images: StaticImageData[];
   className?: string;
+  style?: React.CSSProperties;
 };
 
 export function ImageCarousel(props: ImageCarouselProps) {
-  const { images, className } = props;
+  const { images, className, style } = props;
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const prevSlide = () => {
@@ -39,10 +40,7 @@ export function ImageCarousel(props: ImageCarouselProps) {
   }, []);
 
   return (
-    <div
-      className={clsx("relative w-full", className)}
-      style={{ height: `calc(100vh - 64px)` }}
-    >
+    <div className={clsx("relative w-full", className)} style={style}>
       <div
         className="flex transition-transform duration-1000 h-full"
         style={{
