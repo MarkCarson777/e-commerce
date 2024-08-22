@@ -25,23 +25,29 @@ export function ProductCard(props: ProductCardProps) {
     <Link href={`/products/${product.id}`}>
       <article
         className={clsx(
-          "flex flex-col border-2 border-black rounded-2xl overflow-clip",
+          "flex flex-col rounded overflow-clip h-[600px]",
           className
         )}
       >
-        <figure className="relative h-64 w-full">
+        <figure className="relative h-3/4 w-full">
           <Image
             src={product.image}
             alt={product.name}
             fill
+            style={{
+              objectFit: "cover",
+            }}
             sizes="20vw"
             priority
           />
         </figure>
-        <div className="p-2">
-          <h2>{product.name}</h2>
-          <p>£{product.price}</p>
-          <p>{product.description}</p>
+        <div className="flex flex-col items-center w-full p-4 gap-2">
+          <h2 className="font-montserrat uppercase text-md hover:underline">
+            {product.name}
+          </h2>
+          <p className="font-montserrat text-xl font-semibold tracking-wider">
+            £{product.price}.00
+          </p>
           {path === "/dashboard" && (
             <div className="flex gap-2 justify-end">
               <Button

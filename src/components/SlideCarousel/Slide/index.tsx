@@ -59,7 +59,7 @@ export function Slide(props: SlideProps) {
         <Link href="/products">
           <span
             className={clsx(
-              "uppercase text-montserrat text-xl border-2  px-8 py-4  w-fit",
+              "uppercase text-montserrat text-xl border-2 px-8 py-4 w-fit",
               slide.lightMode
                 ? "hover:bg-white border-black"
                 : "hover:bg-black border-white"
