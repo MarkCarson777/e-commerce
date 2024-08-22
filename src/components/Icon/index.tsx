@@ -2,8 +2,12 @@
 
 import { ReactElement } from "react";
 
-import CircleLeft from "./icons/circle-left.svg";
+import Cart from "./icons/cart.svg";
+import ChevronLeft from "./icons/chevron-left.svg";
 import Home from "./icons/home.svg";
+import Search from "./icons/search.svg";
+import Signout from "./icons/signout.svg";
+import User from "./icons/user.svg";
 
 export interface IconProps {
   icon: string;
@@ -17,8 +21,12 @@ interface IconComponents {
 }
 
 const icons: IconComponents = {
-  CircleLeft,
+  Cart,
+  ChevronLeft,
   Home,
+  Search,
+  Signout,
+  User,
 };
 
 export const Icon = ({

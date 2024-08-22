@@ -1,17 +1,20 @@
 "use client";
 
+// Third party
 import clsx from "clsx";
-
+// React
 import { useState, useEffect } from "react";
-
+// Next
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+// Context
 import { useAuthContext } from "@/context/AuthContext";
 import { useUserContext } from "@/context/UserContext";
-
-import Link from "next/link";
-
+// Firebase
 import { signOut } from "@/firebase/auth";
-
+// Components
+import { Icon } from "@/components/Icon";
+// Types
 import { User } from "@/types";
 
 type NavbarProps = {
@@ -29,8 +32,8 @@ export function Navbar(props: NavbarProps) {
     if (currentUser) {
       const fetchUser = async () => {
         try {
-          const result: User = await getUser(currentUser.uid);
-          setIsAdmin(result.isAdmin);
+          const user: User = await getUser(currentUser.uid);
+          setIsAdmin(user.isAdmin);
         } catch (error) {
           console.error("Error fetching user", error);
         }
@@ -69,7 +72,7 @@ export function Navbar(props: NavbarProps) {
         <ul className="flex space-x-4">
           <li>
             <Link href="#" className="text-gray-300 hover:text-white">
-              SEARCH
+              <Icon icon="Search" size={24} color="#fff" />
             </Link>
           </li>
           <li>
@@ -83,12 +86,12 @@ export function Navbar(props: NavbarProps) {
               }
               className="text-gray-300 hover:text-white"
             >
-              USER
+              <Icon icon="User" size={24} color="#fff" />
             </Link>
           </li>
           <li>
             <Link href="#" className="text-gray-300 hover:text-white">
-              CART
+              <Icon icon="Cart" size={24} color="#fff" />
             </Link>
           </li>
 
@@ -100,7 +103,7 @@ export function Navbar(props: NavbarProps) {
                 router.push("/");
               }}
             >
-              <span>Sign out</span>
+              <Icon icon="Signout" size={24} color="#fff" />
             </button>
           )}
         </ul>
