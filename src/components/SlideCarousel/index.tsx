@@ -101,7 +101,7 @@ export function SlideCarousel(props: SlideCarouselProps) {
           icon="Arrow"
           height={48}
           width={152}
-          className="hover:scale-110 transition-scale duration-200"
+          className="hover:-translate-x-2 hover:scale-105 transition-transform duration-200"
         />
       </button>
       <button
@@ -112,7 +112,7 @@ export function SlideCarousel(props: SlideCarouselProps) {
           icon="Arrow"
           height={48}
           width={152}
-          className="hover:scale-110 transition-scale duration-200"
+          className="hover:-translate-x-2 hover:scale-105 duration-200"
         />
       </button>
     </div>
