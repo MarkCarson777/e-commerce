@@ -24,7 +24,9 @@ export default function Home() {
 
   return (
     <main className="flex flex-col min-h-screen items-center">
-      <Navbar />
+      <div className="w-full shadow-xl z-10">
+        <Navbar />
+      </div>
       <ImageCarousel images={carouselImages} />
       <h1>New Arrivals</h1>
       <section className="relative grid grid-cols-5 gap-3 p-2 w-full">

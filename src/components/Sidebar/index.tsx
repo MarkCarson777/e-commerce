@@ -32,7 +32,7 @@ export function Sidebar(props: SidebarProps) {
     >
       <Link href="/" className="w-fit">
         <div className="flex gap-2">
-          <Icon icon="Home" size={24} color="#fff" />
+          <Icon icon="Home" height={24} width={24} color="#fff" />
           <span>E-COMMERCE</span>
         </div>
       </Link>

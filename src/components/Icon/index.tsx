@@ -2,6 +2,7 @@
 
 import { ReactElement } from "react";
 
+import Arrow from "./icons/ornate-arrow.svg";
 import Cart from "./icons/cart.svg";
 import ChevronLeft from "./icons/chevron-left.svg";
 import Home from "./icons/home.svg";
@@ -12,7 +13,9 @@ import User from "./icons/user.svg";
 export interface IconProps {
   icon: string;
   color?: string;
-  size?: number;
+  height: number;
+  width: number;
+  className?: string;
   [key: string]: any;
 }
 
@@ -21,6 +24,7 @@ interface IconComponents {
 }
 
 const icons: IconComponents = {
+  Arrow,
   Cart,
   ChevronLeft,
   Home,
@@ -32,10 +36,20 @@ const icons: IconComponents = {
 export const Icon = ({
   icon,
   color,
-  size,
+  height,
+  width,
+  className,
   ...rest
 }: IconProps): ReactElement => {
   const Component = icons[icon];
 
-  return <Component {...rest} fill={color} width={size} height={size} />;
+  return (
+    <Component
+      {...rest}
+      fill={color}
+      width={width}
+      height={height}
+      className={className}
+    />
+  );
 };
