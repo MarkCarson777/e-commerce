@@ -14,3 +14,10 @@ export type Product = {
   image: any;
   imageUrl?: string;
 };
+
+export type Slide = {
+  title: string;
+  btn: { label: string; path: string };
+  images: { img: any; alt: string }[];
+  lightMode?: boolean;
+};

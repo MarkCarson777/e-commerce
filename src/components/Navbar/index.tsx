@@ -77,13 +77,11 @@ export function Navbar(props: NavbarProps) {
           </Link>
         </li>
       </ul>
-      <div className="flex items-center justify-center">
-        <Link href="/">
-          <span className="uppercase font-montserrat text-2xl tracking-[8px] font-medium">
-            Apola Showroom
-          </span>
-        </Link>
-      </div>
+      <Link href="/" className="flex justify-center items-center">
+        <span className="uppercase font-montserrat text-2xl tracking-[8px] font-medium mr-[-8px]">
+          Apola Showroom
+        </span>
+      </Link>
       <ul className="flex gap-8 justify-end items-center">
         <li>
           <Link href="#">
