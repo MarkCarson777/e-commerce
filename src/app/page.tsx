@@ -24,7 +24,7 @@ export default function Home() {
       </div>
       <SlideCarousel style={{ height: `calc(100vh - ${navbarHeight}px)` }} />
       <h1 className="pt-16 pb-32">New Arrivals</h1>
-      <section className="relative grid grid-cols-4 gap-8 w-full px-96">
+      <section className="relative grid grid-cols-4 gap-8 w-full px-48">
         {products.map((product, index) => (
           <ProductCard key={index} product={product} />
         ))}
